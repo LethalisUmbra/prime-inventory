@@ -1,17 +1,18 @@
 import UsersTable from "@/components/users/table";
 import { db } from "@vercel/postgres";
 
-export default async function UsersPage() {
-  const client = await db.connect();
-  let users;
-
+async function getUsers() {
+  "use server";
   try {
+    const client = await db.connect();
     const { rows } = await client.sql`SELECT * FROM users`;
-    console.log("Rows", rows);
-    users = rows;
+    return { users: rows };
   } catch (error) {
-    console.log("Error getting users", error);
+    console.log("Error getting users: ", error);
+    return { error: error.message };
   }
+}
 
-  return <UsersTable users={users} />;
+export default async function UsersPage() {
+  return <UsersTable getUsers={getUsers} />;
 }

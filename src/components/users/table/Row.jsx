@@ -1,6 +1,4 @@
-"use client";
 import Link from "next/link";
-import React from "react";
 import { FaEdit, FaEye, FaTrashAlt } from "react-icons/fa";
 import { HiCheck, HiX } from "react-icons/hi";
 
