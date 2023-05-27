@@ -1,31 +1,46 @@
-import { setUser } from "@/lib/user";
+// Next
 import Link from "next/link";
-import crypto from "crypto";
+// Vercel
 import { sql } from "@vercel/postgres";
-import LoginForm from "@/components/auth/LoginForm";
+// Crypto
+import crypto from "crypto";
+// JWT
 import { sign } from "jsonwebtoken";
+// Components
+import LoginForm from "@/components/auth/LoginForm";
 
 export default function LoginPage() {
   // Submit form
   const login = async ({ username, password }) => {
     "use server";
+    // Hash password using sha256
     const hash = crypto.createHash("sha256").update(password).digest("hex");
     try {
+      // Create query to get user
       const { rows } =
         await sql`SELECT * FROM users WHERE name = ${username} AND password = ${hash};`;
+
+      // If no rows then throw an error
       if (rows.length === 0)
         throw new Error(
           "The login credentials are not valid. Please try again."
         );
 
+      // Get user payload discarding password
       const { password, ...rest } = rows[0];
+
+      // Generate Token
       const token = sign(rest, process.env.JWT_SECRET, {
         expiresIn: "30d",
       });
-      setUser(`bearer ${token}`);
 
+      // Validate token exists
+      if (!token) return new Error("Error creating token: ", token);
+
+      // Return token as an object
       return { token };
     } catch (error) {
+      // Handle error returning its message as an object
       return { error: error.message };
     }
   };

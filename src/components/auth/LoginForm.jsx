@@ -1,22 +1,43 @@
 "use client";
-import Cookies from "js-cookie";
-import { useState } from "react";
+import { Context } from "@/context";
+import { useRouter } from "next/navigation";
+import { useContext, useState } from "react";
 
 export default function LoginForm({ login }) {
+  // Router
+  const router = useRouter();
+
+  // Context
+  const { getUser } = useContext(Context);
+
+  // States
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
 
+  // Function to submit form
   const onSubmit = async (e) => {
     e.preventDefault();
+
+    // Send credentals to login async function and get the response
     const res = await login({ username, password });
+
+    // Check if the response contains an error
     if (res.error) {
       setError(res.error);
+      return;
     }
 
+    // Store token in cookie
     document.cookie = `Authorization=bearer ${encodeURIComponent(
       res.token
     )}; path=/;`;
+
+    // GetUser from Context
+    getUser();
+
+    // Redirect user to Home
+    router.push("/");
   };
 
   return (
