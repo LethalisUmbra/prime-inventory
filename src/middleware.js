@@ -12,6 +12,10 @@ const decodeToken = (bearer_token) => {
 export async function middleware(req) {
   const { cookies } = req;
   const bearer_token = cookies.get('Authorization')?.value;
+  const pathname = req.nextUrl.pathname;
+
+  // Prevent loop
+  if (pathname.includes('/logout')) return NextResponse.next();
 
   // Validate token if exists
   if (bearer_token) {
@@ -26,10 +30,8 @@ export async function middleware(req) {
     }
   }
 
-  const pathname = req.nextUrl.pathname;
-
   // Validate that user with token dont enter in auth pages
-  if (pathname.startsWith('/auth') && !pathname.includes('/logout')) {
+  if (pathname.startsWith('/auth')) {
     if (bearer_token) {
       return NextResponse.redirect(new URL('/', req.url));
     }
