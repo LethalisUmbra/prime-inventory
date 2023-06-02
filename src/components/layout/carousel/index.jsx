@@ -7,21 +7,17 @@ import Slide from "./Slide";
 const images = [
   {
     id: 1,
-    src: "/img/PrimeResurgence.jpg",
-    title: "Título de la imagen 1",
-    description: "Descripción de la imagen 1",
+    src: "/img/LethalisGit.jpg",
+    title: "PrimeInventory is a fan page",
+    description: "Developed by LethalisUmbra",
+    isVideo: false,
   },
   {
     id: 2,
-    src: "/img/CarouselNewWar.jpg",
-    title: "Título de la imagen 2",
-    description: "Descripción de la imagen 2",
-  },
-  {
-    id: 3,
-    src: "/img/LethalisGit.jpg",
-    title: "Título de la imagen 3",
-    description: "Descripción de la imagen 3",
+    src: "/carousel/duviri-paradox-launch-cutdown.webm",
+    title: "The Duviri Paradox",
+    description: "Available now on all platforms",
+    isVideo: true,
   },
 ];
 
@@ -55,8 +51,19 @@ export default function Carousel() {
   }, [currentIndex, isPlaying, handleNextClick]);
 
   return (
-    <div className='relative w-full' style={{ height: "520px" }}>
-      <Slide element={images[currentIndex]} />
+    <div
+      className='relative w-full bg-black overflow-hidden'
+      style={{ height: "520px" }}
+    >
+      {images.map((image, key) => (
+        <Slide
+          element={image}
+          key={key}
+          visible={key === currentIndex}
+          isVideo={image.isVideo}
+        />
+      ))}
+      {/* <Slide element={images[currentIndex]} /> */}
       <PrevButton onClick={handlePrevClick} />
       <NextButton onClick={handleNextClick} />
     </div>
