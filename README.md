@@ -1,6 +1,6 @@
 # Prime Inventory
 
-![Prime Inventory Logo](/path/to/logo.png)
+![Prime Inventory Logo](/public/favicon.ico)
 
 Prime Inventory es una aplicación web que facilita la gestión del inventario de partes primes en el juego Warframe. Warframe es un videojuego de acción en línea en el que los jugadores pueden obtener y personalizar una variedad de Warframes, Armas, Archwings y Compañeros. Las partes primes son versiones mejoradas de estos elementos y son necesarias para fabricarlos.
 
