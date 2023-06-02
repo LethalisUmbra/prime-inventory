@@ -21,8 +21,8 @@ export async function middleware(req) {
   if (bearer_token) {
     try {
       const isTokenValid = await decodeToken(bearer_token);
-      if (!isTokenValid) {
-        throw new Error('Invalid token signature');
+      if (isTokenValid.error) {
+        throw new Error('Invalid token signature: ', isTokenValid.error.message);
       }
     } catch (error) {
       console.error('Invalid token:', error);
