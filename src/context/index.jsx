@@ -5,6 +5,7 @@ import { createContext, useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 // Cookies
 import Cookies from "js-cookie";
+import { decodeToken } from "@/lib/jwt";
 
 // Create Context
 const Context = createContext();
@@ -18,25 +19,21 @@ function ContextProvider({ children }) {
   const [user, setUser] = useState();
   const [warframes, setWarframes] = useState();
 
-  const getUser = useCallback(() => {
+  const getUser = useCallback(async () => {
     const bearer_token = Cookies.get("Authorization");
     if (!bearer_token) return;
 
-    fetch(`/api/auth/decode`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (!data.id) {
-          throw new Error("user not found");
-        }
-        setUser(data);
-      })
-      .catch((err) => {
-        console.log("Error getting user:", err.message);
-        setUser();
-      });
+    const decoded = await decodeToken(bearer_token);
+
+    console.log("DECODED", decoded);
+
+    if (!decoded.id) {
+      console.log("Error getting user: user not found");
+      setUser();
+      return;
+    }
+
+    setUser(decoded);
   }, []);
 
   const logout = useCallback(() => {

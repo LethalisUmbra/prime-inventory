@@ -1,10 +1,15 @@
+"use server";
 import { verify } from 'jsonwebtoken';
 
-const decodeToken = (bearer_token) => {
-  const token = decodeURIComponent(bearer_token.split(" ")[1])
-  const secret = process.env.JWT_SECRET;
-  const { password, ...rest } = verify(token, secret)
-  return rest;
+async function decodeToken(bearer_token) {
+  try {
+    const token = decodeURIComponent(bearer_token.split(" ")[1])
+    const secret = process.env.JWT_SECRET;
+    const { password, ...rest } = verify(token, secret)
+    return rest;
+  } catch (error) {
+    return { error }
+  }
 }
 
 function base64urlToUint8Array(base64url) {
