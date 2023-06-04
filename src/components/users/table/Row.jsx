@@ -26,7 +26,7 @@ export default function UsersTableRow({ user }) {
       <td className='px-6 py-2 text-right'>
         <div className='flex w-full items-center justify-between gap-2 mx-auto'>
           <Link
-            href={`/admin/user/${user.slug}/edit`}
+            href={`/admin/users/${user.slug}/edit`}
             className='font-medium text-blue-500 hover:text-blue-700 hover:shadow transition-all bg-blue-50 rounded-full p-2 hover:bg-blue-200'
             title={`Edit ${user.name}`}
           >
